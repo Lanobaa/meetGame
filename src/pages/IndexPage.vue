@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
+import { useThrottleFn } from '@vueuse/core';
 import * as echarts from 'echarts/core';
 import { LineChart } from 'echarts/charts';
 import {
@@ -99,8 +100,36 @@ const menus = ref([
     ]
   },
 ]);
+const nxx = ref(0);
+const nyy = ref(0);
 
+const spiritEffect = (fo, nx, ny) => {
+  if (fo == 'top') {
+    nyy.value = ny;
+  }
+  if (fo == "bottom") {
+    nyy.value = -ny;
+  }
+  if (fo == 'left') {
+   nxx.value = nx;
+  }
+  if (fo == "right") {
+    nxx.value = -nx;
+  }
+}
 onMounted(() => {
+  const w = document.body.clientWidth;
+  const h = document.body.clientHeight;
+  const dirName = ['top', 'right', 'bottom', 'left'];
+  document.addEventListener('mousemove', useThrottleFn((e) => {
+    let x = (e.pageX - (w / 2)) * (w > h ? (h / w) : 1);
+    let y = (e.pageY - (h / 2)) * (h > w ? (w / h) : 1);
+    let direction = Math.round((((Math.atan2(y, x) * (180 / Math.PI)) + 180) / 90) + 3) % 4;
+    let dirText = dirName[direction];
+    let nx = x / 22;
+    let ny = y / 22;
+    spiritEffect(dirText, Math.abs(nx), Math.abs(ny));
+  }, 100));
   const myChart = echarts.init(document.getElementById('myEcharts'));
   myChart.setOption({
     color: ['#8656F4', '#00DDFF', '#37A2FF', '#FF0087', '#FFBF00'],
@@ -444,16 +473,21 @@ onMounted(() => {
       <div class="body flex flex-row flex-nowrap flex-1">
 
         <div class="bodyLeft flex-">
-          <div class="cover">
-            <div class="title">
-              <span>成为爆款游戏</span>
-              <p>无论是个人开发者还是成熟团队，<br/>MeetGames助您成功出海！</p>
+          <div class="cover flex flex-row justify-between items-center">
+            <div class="title" :style="{ 'transform': `translate(${nxx}px, ${nyy}px)` }">
+             <div class="t_wrap">
+               <span>成为爆款游戏</span>
+               <p>无论是个人开发者还是成熟团队，<br/>MeetGames助您成功出海！</p>
+             </div>
             </div>
-            <div class="c_img"></div>
+            <div class="layout">
+              <div class="c_circle" :style="{ 'transform': `translate(${nxx}px, ${nyy}px)` }"></div>
+              <div class="c_shank" :style="{ 'transform': `translate(${-nxx}px, ${-nyy}px)` }"></div>
+            </div>
           </div>
           <div class="pivotal flex justify-between items-end">
             <div class="p_con">
-              <div class="title">
+              <div class="title flex flex-row justify-between items-center">
                 <span>关键数据</span>
                 <a>2022-12-31</a>
               </div>
@@ -597,36 +631,76 @@ onMounted(() => {
         padding: 0 30px;
         position: relative;
         .cover {
-          width: 100%;
+          width: 60%;
           position: absolute;
-          top: 0;
+          top: 40px;
           left: 0;
+          right: 0;
+          margin: auto;
           z-index: 1;
+          transition: all 500ms;
           .title {
-            position: absolute;
-            top: 40px;
-            left: 15%;
-            span {
-              font-weight: bold;
-              font-size: 24px;
-              color: #232844;
+            transition: all 1000ms;
+            .t_wrap {
+              transition: all 1000ms;
+              &:hover {
+                transform: scale(1.1);;
+                cursor: pointer;
+              }
+
+              span {
+                font-weight: bold;
+                font-size: 24px;
+                color: #232844;
+              }
+              p {
+                white-space: nowrap;
+                font-size: 14px;
+                color: #797b82;
+                margin-top: 8px;
+              }
             }
-            p {
-              white-space: nowrap;
-              font-size: 14px;
-              color: #797b82;
-              margin-top: 8px;
-            }
+
           }
-          .c_img {
+          .layout {
             width: 408px;
-            height: 249px;
-            position: absolute;
+            position: relative;
             transform: scale(1.2);
             top: 20px;
-            left: 45%;
-            background: url('../assets/handShank.png');
-            background-size: 100% 100%;
+            animation: shankMovie 800ms ease-in-out;
+            @keyframes shankMovie {
+              0% {
+                transform: translateY(100px) scale(0.1);
+              }
+              70% {
+                transform: scale(1.5);
+              }
+              100% {
+                transform: scale(1.2);
+              }
+            }
+            .c_shank {
+              transition: all 600ms;
+              width: 262px;
+              height: 229px;
+              position: absolute;
+              transform: scale(1.2);
+              top: -100px;
+              left: 74px;
+              background: url('../assets/shank.png');
+              background-size: 100% 100%;
+            }
+            .c_circle {
+              transition: all 1000ms;
+              width: 408px;
+              height: 97px;
+              position: absolute;
+              transform: scale(1.2);
+              top: -30px;
+              left: 0;
+              background: url('../assets/circleball.png');
+              background-size: 100% 100%;
+            }
           }
         }
         .pivotal {
@@ -668,13 +742,20 @@ onMounted(() => {
               font-size: 16px;
               color: white;
               margin-top: -20px;
-              margin-left: 10px;
+              margin-left: 20px;
               margin-bottom: 26px;
+              position: relative;
+              a {
+                position: absolute;
+                top: 20px;
+                right: 10px;
+                font-size: 14px;
+                color: rgba(255,255,255, 0.5);
+              }
             }
             .category {
               width: inherit;
               .c_item {
-                padding-left: 30px;
                 border-right: 1px solid rgba(255,255,255, 0.2);
                 text-align: center;
                 &:last-child {
@@ -682,10 +763,10 @@ onMounted(() => {
                 }
                 & > span {
                   font-size: 14px;
-                  margin-bottom: 10px;
                   color: rgba(255,255,255, .8);
                 }
                 p {
+                  margin-bottom: 10px;
                   white-space: nowrap;
                   font-size: 24px;
                   color: white;

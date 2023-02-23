@@ -15,6 +15,7 @@
     "test:ci-ct": "playwright test -c playwright-ct.config.ts"
   },
   "dependencies": {
+    "@vueuse/core": "^9.13.0",
     "@vueuse/head": "1.0.22",
     "echarts": "^5.4.1",
     "pinia": "2.0.28",
