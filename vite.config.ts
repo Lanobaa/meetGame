@@ -38,5 +38,8 @@ export default defineConfig({
       '@': resolve(__dirname, './src'),
     },
   },
-  base: ''
+  base: './',
+  build: {
+    target: ['es2020', 'edge88', 'firefox78', 'chrome87', 'safari14']
+  }
 })

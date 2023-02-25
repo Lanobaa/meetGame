@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
+import { videoPlay } from 'vue3-video-play';
+import 'vue3-video-play/dist/style.css'
 import { useThrottleFn } from '@vueuse/core';
 import * as echarts from 'echarts/core';
 import { LineChart } from 'echarts/charts';
+import meetVideo from '../assets/6_1677240394.mp4';
 import {
   LegendComponent,
   TitleComponent,
@@ -16,6 +19,9 @@ import {
 import { LabelLayout, UniversalTransition } from 'echarts/features';
 // 引入 Canvas 渲染器，注意引入 CanvasRenderer 或者 SVGRenderer 是必须的一步
 import { CanvasRenderer } from 'echarts/renderers';
+import Header from './Header.vue';
+import Menu from './Menu.vue';
+import Right from './Right.vue';
 
 // 注册必须的组件
 echarts.use([
@@ -31,75 +37,27 @@ echarts.use([
   UniversalTransition,
   CanvasRenderer
 ]);
-import logo from '@/assets/logo.png';
-import photo from '@/assets/photo.png';
-import bell from '@/assets/bell.png';
-import home from '@/assets/home.png';
-import media from '@/assets/media.png';
-import creativity from '@/assets/creativity.png'
-import advertise from '@/assets/advertise.png';
-import sdk from '@/assets/sdk.png';
-import game from '@/assets/game.png';
-import manage from '@/assets/manage.png';
+
+
 import crossImg from '@/assets/x.png';
-// useRoute, useHead, and HelloWorld are automatically imported. See vite.config.ts for details.
-const menus = ref([
-  {
-    title: '控制台',
-    icon: home,
-    children: [
-      { title: '概览' },
-    ]
-  },
-  {
-    title: '媒体资产',
-    icon: media,
-    children: [
-      { title: '媒体账户' },
-      { title: '媒体充值' },
-    ]
-  },
-  {
-    title: '创意素材',
-    icon: creativity,
-    children: [
-      { title: '素材管理' },
-      { title: '素材成效' },
-    ]
-  },
-  {
-    title: '广告创编',
-    icon: advertise,
-    children: [
-      { title: '广告工具' },
-      { title: '授权管理' },
-    ]
-  },
-  {
-    title: 'TopSDK',
-    icon: sdk,
-    children: [
-      { title: '我的游戏' },
-      { title: 'SDK下载' },
-    ]
-  },
-  {
-    title: '游戏发行学院',
-    icon: game,
-    children: [
-      { title: '学院首页' },
-      { title: '学习中心' },
-    ]
-  },
-  {
-    title: '管理中心',
-    icon: manage,
-    children: [
-      { title: '团队管理' },
-      { title: '钱包' },
-    ]
-  },
-]);
+const options = reactive({
+  width: '100vw', //播放器高度
+  height: '100vh', //播放器高度
+  color: "#409eff", //主题色
+  title: '', //视频名称
+  src: meetVideo, //视频源
+  muted: false, //静音
+  webFullScreen: false,
+  speedRate: ["0.75", "1.0", "1.25", "1.5", "2.0"], //播放倍速
+  autoPlay: true, //自动播放
+  loop: false, //循环播放
+  mirror: false, //镜像画面
+  ligthOff: false,  //关灯模式
+  volume: 0.3, //默认音量大小
+  control: true, //是否显示控制
+  controlBtns:['audioTrack', 'quality', 'speedRate', 'volume', 'setting', 'pip'] //显示所有按钮,
+})
+
 const nxx = ref(0);
 const nyy = ref(0);
 
@@ -220,6 +178,8 @@ onMounted(() => {
         emphasis: {
           focus: 'series'
         },
+        animationEasing: 'cubicIn',
+        animationDuration: 1800,
         data: [500, 3200, 2500, 4200, 2600, 5000, 400]
       },
     ]
@@ -321,6 +281,8 @@ onMounted(() => {
         emphasis: {
           focus: 'series'
         },
+        animationEasing: 'cubicIn',
+        animationDuration: 1800,
         data: [500, 3200, 2500, 4200, 2600, 5000, 400]
       },
       {
@@ -351,6 +313,8 @@ onMounted(() => {
         emphasis: {
           focus: 'series'
         },
+        animationEasing: 'cubicIn',
+        animationDuration: 1800,
         data: [2000, 100, 5000, 2900, 2600, 1000, 600]
       },
     ]
@@ -440,6 +404,8 @@ onMounted(() => {
         emphasis: {
           focus: 'series'
         },
+        animationEasing: 'cubicIn',
+        animationDuration: 1800,
         data: [500, 3200, 2500, 4200, 2600, 5000, 400]
       },
     ]
@@ -449,29 +415,13 @@ onMounted(() => {
 
 <template>
   <div class="home">
-    <div class="header flex justify-between items-center">
-      <div class="logo pl-4"><img :src="logo" alt=""></div>
-      <div class="user flex justify-end items-center pr-5">
-        <a class="ml-5 text-sm">文档中心</a>
-        <a class="ml-5 text-sm">工单</a>
-        <div class="vertical ml-6"></div>
-        <a class="bell ml-6"><img :src="bell" alt=""></a>
-        <div class="photo ml-6"><img :src="photo" alt=""></div>
-      </div>
+    <div class="videos">
+      <videoPlay v-bind="options" />
     </div>
+    <Header />
     <div class="main flex flex-nowrap flex-row">
-      <div class="menu">
-        <ul
-            class="menuItem"
-            v-for="(item, index) in menus"
-            :key="index"
-        >
-          <li class="subject flex flex-row items-center"><img :src="item.icon" alt=""><span>{{ item.title }}</span></li>
-          <li v-for="(cur, key) in item.children" :key="key + index">{{ cur.title }}</li>
-        </ul>
-      </div>
+      <Menu />
       <div class="body flex flex-row flex-nowrap flex-1">
-
         <div class="bodyLeft flex-">
           <div class="cover flex flex-row justify-between items-center">
             <div class="title" :style="{ 'transform': `translate(${nxx}px, ${nyy}px)` }">
@@ -485,7 +435,7 @@ onMounted(() => {
               <div class="c_shank" :style="{ 'transform': `translate(${-nxx}px, ${-nyy}px)` }"></div>
             </div>
           </div>
-          <div class="pivotal flex justify-between items-end">
+          <div class="pivotal flex justify-between items-end animateBottomToTop1">
             <div class="p_con">
               <div class="title flex flex-row justify-between items-center">
                 <span>关键数据</span>
@@ -513,11 +463,11 @@ onMounted(() => {
             <div class="p_bg bg_one"></div>
             <div class="p_bg bg_two"></div>
           </div>
-          <div class="myEcharts">
+          <div class="myEcharts animateBottomToTop2">
             <div class="target"><img src="../assets/target.png" alt=""></div>
             <div id="myEcharts" :style="{ width: '100%', height: '300px' }"></div>
           </div>
-          <div class="e_two flex flex-row justify-between items-center">
+          <div class="e_two flex flex-row justify-between items-center animateBottomToTop3">
             <div class="channel"><img src="../assets/channel.png" alt=""></div>
             <div class="flex-1">
               <div id="myEchartsOne" :style="{ width: '100%', height: '300px' }"></div>
@@ -527,27 +477,90 @@ onMounted(() => {
             </div>
           </div>
         </div>
-        <div class="bodyRight flex-1"></div>
+        <div class="bodyRight flex-1">
+          <Right />
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <style lang="less">
+
+.animateBottomToTop1 {
+  animation: commonMovie 500ms;
+  animation-delay: 6500ms;
+  animation-fill-mode: forwards;
+  opacity: 0;
+}
+.animateBottomToTop2 {
+  animation: commonMovie 500ms;
+  animation-delay: 6800ms;
+  animation-fill-mode: forwards;
+  opacity: 0;
+}
+.animateBottomToTop3 {
+  animation: commonMovie 500ms;
+  animation-delay: 7100ms;
+  animation-fill-mode: forwards;
+  opacity: 0;
+}
+.animateBottomToTop4 {
+  animation: commonMovie 500ms;
+  animation-delay: 7400ms;
+  animation-fill-mode: forwards;
+  opacity: 0;
+}
+.animateBottomToTop5 {
+  animation: commonMovie 500ms;
+  animation-delay: 7900ms;
+  animation-fill-mode: forwards;
+  opacity: 0;
+}
+.animateBottomToTop6 {
+  animation: commonMovie 500ms;
+  animation-delay: 8200ms;
+  animation-fill-mode: forwards;
+  opacity: 0;
+}
+@keyframes commonMovie {
+  0% {
+    opacity: 0;
+    transform: translateY(100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
+</style>
+
+<style lang="less" scoped>
 .home {
   width: 100vw;
   height: 100vh;
-  .header {
+  .videos {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    margin: auto;
+    z-index: 100;
     width: 100vw;
-    height: 60px;
-    background: white;
-    .user {
-      a {
-        color: #767B84;
+    height: 100vh;
+    background: pink;
+    animation: sixHide 6s;
+    opacity: 0;
+    @keyframes sixHide {
+      0% {
+        opacity: 1;
       }
-      .vertical {
-        height: 16px;
-        border-left: 1px solid #c9cdd4;
+      98% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
       }
     }
   }
@@ -555,74 +568,6 @@ onMounted(() => {
     width: 100vw;
     height: calc(100vh - 60px);
     overflow: hidden;
-    .menu {
-      width: 220px;
-      padding: 10px;
-      height: 100%;
-      border-top: 4px solid #f8f8f8;
-      background-image: url('../assets/menubg.png');
-      background-repeat: no-repeat;
-      background-position: left bottom;
-      background-size: 100% auto;
-      ul {
-        .subject {
-          img  {
-            position: absolute;
-            top: 0;
-            left: 24px;
-            bottom: 0;
-            margin: auto;
-          }
-        }
-        li:first-child {
-          color: rgba(89, 91, 97, 1);
-        }
-        li {
-          cursor: pointer;
-          position: relative;
-          z-index: 3;
-          border-radius: 8px;
-          padding: 0 10px;
-          height: 40px;
-          font-size: 14px;
-          color: rgba(89, 91, 97, .6);
-          line-height: 40px;
-          text-indent: 40px;
-          transition: all 300ms;
-          &:hover {
-            color: #fff;
-            &:after {
-              opacity: 1;
-              //animation: gradientMovie 300ms;
-              //animation-fill-mode: forwards;
-            }
-          }
-          @keyframes gradientMovie {
-            to { opacity: 0 }
-            from { opacity: 1 }
-          }
-          &:after {
-            content: '';
-            transition: all 300ms;
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            border-radius: 8px;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            margin: auto;
-            z-index: -1;
-            background: #8633ff;
-            background: -moz-linear-gradient(top,  #8633ff 0%, #6c30cb 100%);
-            background: -webkit-linear-gradient(top,  #8633ff 0%,#6c30cb 100%);
-            background: linear-gradient(to bottom,  #8633ff 0%,#6c30cb 100%);
-            opacity: 0;
-          }
-        }
-      }
-    }
     .body {
       max-height: 100%;
       background: #f8f8f8;
@@ -667,28 +612,42 @@ onMounted(() => {
             position: relative;
             transform: scale(1.2);
             top: 20px;
-            animation: shankMovie 800ms ease-in-out;
-            @keyframes shankMovie {
-              0% {
-                transform: translateY(100px) scale(0.1);
-              }
-              70% {
-                transform: scale(1.5);
-              }
-              100% {
-                transform: scale(1.2);
-              }
-            }
+            //animation: shankMovie 800ms ease-in-out;
+            //@keyframes shankMovie {
+            //  0% {
+            //    transform: translateY(100px) scale(0.1);
+            //  }
+            //  70% {
+            //    transform: scale(1.5);
+            //  }
+            //  100% {
+            //    transform: scale(1.2);
+            //  }
+            //}
             .c_shank {
               transition: all 600ms;
-              width: 262px;
-              height: 229px;
+              width: 190px;
+              height: 154px;
               position: absolute;
-              transform: scale(1.2);
-              top: -100px;
-              left: 74px;
-              background: url('../assets/shank.png');
+              transform: scale(1);
+              top: -50px;
+              left: 120px;
+              background: url('../assets/handShank.png');
               background-size: 100% 100%;
+              animation: changeSmall 500ms;
+              animation-delay: 6s;
+              @keyframes changeSmall {
+                0% {
+                  top: 34rem;
+                  left: -17rem;
+                  transform: scale(5) rotate(2deg);
+                }
+                100% {
+                  top: -50px;
+                  left: 120px;
+                  transform: scale(1) rotate(0deg);
+                }
+              }
             }
             .c_circle {
               transition: all 1000ms;
@@ -853,8 +812,8 @@ onMounted(() => {
       }
       .bodyRight {
         flex: 1;
+        padding-right: 30px;
         min-width: 300px;
-        background: orange;
       }
     }
   }
