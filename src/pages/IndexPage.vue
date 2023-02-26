@@ -41,8 +41,8 @@ echarts.use([
 
 import crossImg from '@/assets/x.png';
 const options = reactive({
-  width: '100vw', //播放器高度
-  height: '100vh', //播放器高度
+  width: '100%', //播放器高度
+  height: '100%', //播放器高度
   color: "#409eff", //主题色
   title: '', //视频名称
   src: meetVideo, //视频源
@@ -54,7 +54,7 @@ const options = reactive({
   mirror: false, //镜像画面
   ligthOff: false,  //关灯模式
   volume: 0.3, //默认音量大小
-  control: true, //是否显示控制
+  control: false, //是否显示控制
   controlBtns:['audioTrack', 'quality', 'speedRate', 'volume', 'setting', 'pip'] //显示所有按钮,
 })
 
@@ -91,6 +91,7 @@ onMounted(() => {
   const myChart = echarts.init(document.getElementById('myEcharts'));
   myChart.setOption({
     color: ['#8656F4', '#00DDFF', '#37A2FF', '#FF0087', '#FFBF00'],
+    animationDelay: 7500,
     title: {
       text: '投放数据',
       top: 0,
@@ -187,6 +188,7 @@ onMounted(() => {
   const myChartOne = echarts.init(document.getElementById('myEchartsOne'));
   myChartOne.setOption({
     color: ['#8656F4', '#FFBD48', '#37A2FF', '#FF0087', '#FFBF00'],
+    animationDelay: 7500,
     title: {
       text: '模拟人生',
       top: 0,
@@ -322,6 +324,7 @@ onMounted(() => {
   const myChartTwo = echarts.init(document.getElementById('myEchartsTwo'));
   myChartTwo.setOption({
     color: ['#FFBD48', '#00DDFF', '#37A2FF', '#FF0087', '#FFBF00'],
+    animationDelay: 7500,
     tooltip: {
       trigger: 'axis',
       axisPointer: {
@@ -415,9 +418,6 @@ onMounted(() => {
 
 <template>
   <div class="home">
-    <div class="videos">
-      <videoPlay v-bind="options" />
-    </div>
     <Header />
     <div class="main flex flex-nowrap flex-row">
       <Menu />
@@ -432,7 +432,11 @@ onMounted(() => {
             </div>
             <div class="layout">
               <div class="c_circle" :style="{ 'transform': `translate(${nxx}px, ${nyy}px)` }"></div>
-              <div class="c_shank" :style="{ 'transform': `translate(${-nxx}px, ${-nyy}px)` }"></div>
+              <div class="c_shank" :style="{ 'transform': `translate(${-nxx}px, ${-nyy}px) rotate(10deg)` }">
+                <div class="videos">
+                  <videoPlay v-bind="options" poster="https://cdn.jsdelivr.net/gh/xdlumia/files/video-play/ironMan.jpg" />
+                </div>
+              </div>
             </div>
           </div>
           <div class="pivotal flex justify-between items-end animateBottomToTop1">
@@ -539,31 +543,6 @@ onMounted(() => {
 .home {
   width: 100vw;
   height: 100vh;
-  .videos {
-    position: absolute;
-    top: 0;
-    right: 0;
-    left: 0;
-    bottom: 0;
-    margin: auto;
-    z-index: 100;
-    width: 100vw;
-    height: 100vh;
-    background: pink;
-    animation: sixHide 6s;
-    opacity: 0;
-    @keyframes sixHide {
-      0% {
-        opacity: 1;
-      }
-      98% {
-        opacity: 1;
-      }
-      100% {
-        opacity: 0;
-      }
-    }
-  }
   .main {
     width: 100vw;
     height: calc(100vh - 60px);
@@ -625,27 +604,63 @@ onMounted(() => {
             //  }
             //}
             .c_shank {
+              font-size: 16px;
               transition: all 600ms;
-              width: 190px;
-              height: 154px;
+              /*width: 11.875rem;
+              height: 9.625rem;
+              top: -3.125rem;
+              left: 7.5rem;*/
+              width: 11.875em;
+              height: 9.625em;
+              top: -2.6em;
+              left: 6em;
               position: absolute;
-              transform: scale(1);
-              top: -50px;
-              left: 120px;
               background: url('../assets/handShank.png');
               background-size: 100% 100%;
-              animation: changeSmall 500ms;
-              animation-delay: 6s;
+              animation: changeSmall 7s;
+              animation-fill-mode: forwards;
+              opacity: 1;
               @keyframes changeSmall {
                 0% {
-                  top: 34rem;
-                  left: -17rem;
-                  transform: scale(5) rotate(2deg);
+                  font-size: 500px;
+                  top: -2.6em;
+                  left: 6em;
+                  opacity: 1;
+                }
+                85% {
+                  font-size: 500px;
+                  top: -2.6em;
+                  left: 6em;
                 }
                 100% {
-                  top: -50px;
-                  left: 120px;
-                  transform: scale(1) rotate(0deg);
+                  font-size: 16px;
+                  opacity: 1;
+                  top: -3.125em;
+                  left: 7.5em;
+                }
+              }
+              .videos {
+                position: absolute;
+                top: 2.4em;
+                left: 5.4375em;
+                margin: auto;
+                z-index: 100;
+                width: 2.5em;
+                height: 1.875em;
+                transform: rotate(-10deg);
+                animation: sixHide 7s;
+                animation-fill-mode: forwards;
+                opacity: 0;
+                @keyframes sixHide {
+                  0% {
+                    opacity: 1;
+                  }
+                  85% {
+                    opacity: 1;
+                  }
+                  100% {
+                    opacity: 0;
+                  }
                 }
               }
             }

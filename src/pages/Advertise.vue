@@ -7,8 +7,6 @@ import four from '../assets/a_4.png';
 import five from '../assets/a_5.png';
 import six from '../assets/a_6.png';
 import seven from '../assets/a_7.png';
-import eight from '../assets/a_8.png';
-import btn from '../assets/btn_1.png';
 
 const data = ref([
   {
@@ -58,6 +56,9 @@ const current = ref(0);
 const mouseEnterFn = (index: number) => {
   current.value = index;
 };
+const mouseLeaveFn = () => {
+  current.value = 0;
+}
 </script>
 
 <template>
@@ -68,7 +69,7 @@ const mouseEnterFn = (index: number) => {
           v-for="(item, index) in data"
           :key="index"
           @mouseenter="() => mouseEnterFn(index)"
-          @mouseleave="current = 0"
+          @mouseleave="mouseLeaveFn"
           :class="[
             'flex',
             'flex-row',
