@@ -92,7 +92,7 @@ onMounted(() => {
         detail: {
           show: false,
         },
-        animationDelay: 7900,
+        animationDelay: 3300,
       },
       {
         type: 'gauge',
@@ -103,7 +103,7 @@ onMounted(() => {
         pointer: {
           show: false,
         },
-        animationDelay: 7900,
+        animationDelay: 3300,
         progress: {
           show: true,
           overlap: false,
