@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { videoPlay } from 'vue3-video-play';
 import 'vue3-video-play/dist/style.css'
 import { useThrottleFn } from '@vueuse/core';
 import * as echarts from 'echarts/core';
@@ -60,7 +59,6 @@ const options = reactive({
 
 const nxx = ref(0);
 const nyy = ref(0);
-
 const spiritEffect = (fo, nx, ny) => {
   if (fo == 'top') {
     nyy.value = ny;
@@ -91,7 +89,7 @@ onMounted(() => {
   const myChart = echarts.init(document.getElementById('myEcharts'));
   myChart.setOption({
     color: ['#8656F4', '#00DDFF', '#37A2FF', '#FF0087', '#FFBF00'],
-    animationDelay: 7500,
+    animationDelay: 3300,
     title: {
       text: '投放数据',
       top: 0,
@@ -188,7 +186,7 @@ onMounted(() => {
   const myChartOne = echarts.init(document.getElementById('myEchartsOne'));
   myChartOne.setOption({
     color: ['#8656F4', '#FFBD48', '#37A2FF', '#FF0087', '#FFBF00'],
-    animationDelay: 7500,
+    animationDelay: 3300,
     title: {
       text: '模拟人生',
       top: 0,
@@ -324,7 +322,7 @@ onMounted(() => {
   const myChartTwo = echarts.init(document.getElementById('myEchartsTwo'));
   myChartTwo.setOption({
     color: ['#FFBD48', '#00DDFF', '#37A2FF', '#FF0087', '#FFBF00'],
-    animationDelay: 7500,
+    animationDelay: 3300,
     tooltip: {
       trigger: 'axis',
       axisPointer: {
@@ -431,12 +429,10 @@ onMounted(() => {
              </div>
             </div>
             <div class="layout">
-              <div class="c_circle" :style="{ 'transform': `translate(${nxx}px, ${nyy}px)` }"></div>
-              <div class="c_shank" :style="{ 'transform': `translate(${-nxx}px, ${-nyy}px) rotate(10deg)` }">
-                <div class="videos">
-                  <videoPlay v-bind="options" poster="https://cdn.jsdelivr.net/gh/xdlumia/files/video-play/ironMan.jpg" />
-                </div>
+              <div class="animateBottomToTopTwo">
+                <div class="c_circle" :style="{ 'transform': `translate(${nxx}px, ${nyy}px)` }"></div>
               </div>
+              <div class="animateBottomToTopOne"><div class="c_shank" :style="{ 'transform': `translate(${-nxx}px, ${-nyy}px)` }"></div></div>
             </div>
           </div>
           <div class="pivotal flex justify-between items-end animateBottomToTop1">
@@ -490,47 +486,93 @@ onMounted(() => {
 </template>
 
 <style lang="less">
-
-.animateBottomToTop1 {
-  animation: commonMovie 500ms;
-  animation-delay: 6500ms;
+.animateBottomToTopOne {
+  animation: commonMovieOne 1s ease-out;
   animation-fill-mode: forwards;
+  opacity: 0;
+  @keyframes commonMovieOne {
+    0% {
+      opacity: .8;
+      transform: translateY(30px) scale(0.2) skew(-30deg) rotate(30deg) rotateZ(10deg) ;
+    }
+    60% {
+      opacity: 1;
+      transform: translateY(0px) scale(1.3) skew(0deg) rotate(0deg) rotateZ(0deg) ;
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0px) scale(1);
+    }
+  }
+}
+.animateBottomToTopTwo {
+  animation: commonMovieTwo 1s ease-out;
+  animation-fill-mode: forwards;
+  opacity: 0;
+  animation-delay: 150ms;
+  @keyframes commonMovieTwo {
+    0% {
+      opacity: .8;
+      transform: translateY(30px) scale(0.2) skew(-30deg) rotate(30deg) rotateZ(10deg) ;
+    }
+    60% {
+      opacity: 1;
+      transform: translateY(0px) scale(1.3) skew(0deg) rotate(0deg) rotateZ(0deg) ;
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0px) scale(1);
+    }
+    //0% {
+    //  opacity: 1;
+    //  transform: translateY(0px) scale(2);
+    //}
+    //100% {
+    //  opacity: 1;
+    //  transform: translateY(0px) scale(1);
+    //}
+  }
+}
+.animateBottomToTop1 {
+  animation: commonMovie 1s ease-out;
+  animation-fill-mode: forwards;
+  animation-delay: 800ms;
   opacity: 0;
 }
 .animateBottomToTop2 {
-  animation: commonMovie 500ms;
-  animation-delay: 6800ms;
+  animation: commonMovie 1s ease-out;
+  animation-delay: 1300ms;
   animation-fill-mode: forwards;
   opacity: 0;
 }
 .animateBottomToTop3 {
-  animation: commonMovie 500ms;
-  animation-delay: 7100ms;
+  animation: commonMovie 1s ease-out;
+  animation-delay: 1800ms;
   animation-fill-mode: forwards;
   opacity: 0;
 }
 .animateBottomToTop4 {
-  animation: commonMovie 500ms;
-  animation-delay: 7400ms;
+  animation: commonMovie 1s ease-out;
+  animation-delay: 1800ms;
   animation-fill-mode: forwards;
   opacity: 0;
 }
 .animateBottomToTop5 {
-  animation: commonMovie 500ms;
-  animation-delay: 7900ms;
+  animation: commonMovie 1s ease-out;
+  animation-delay: 2200ms;
   animation-fill-mode: forwards;
   opacity: 0;
 }
 .animateBottomToTop6 {
-  animation: commonMovie 500ms;
-  animation-delay: 8200ms;
+  animation: commonMovie 1s ease-out;
+  animation-delay: 2300ms;
   animation-fill-mode: forwards;
   opacity: 0;
 }
 @keyframes commonMovie {
   0% {
     opacity: 0;
-    transform: translateY(100px);
+    transform: translateY(-30px);
   }
   100% {
     opacity: 1;
@@ -542,11 +584,8 @@ onMounted(() => {
 <style lang="less" scoped>
 .home {
   width: 100vw;
-  height: 100vh;
   .main {
     width: 100vw;
-    height: calc(100vh - 60px);
-    overflow: hidden;
     .body {
       max-height: 100%;
       background: #f8f8f8;
@@ -604,7 +643,6 @@ onMounted(() => {
             //  }
             //}
             .c_shank {
-              font-size: 16px;
               transition: all 600ms;
               /*width: 11.875rem;
               height: 9.625rem;
@@ -617,50 +655,23 @@ onMounted(() => {
               position: absolute;
               background: url('../assets/handShank.png');
               background-size: 100% 100%;
-              animation: changeSmall 7s;
+              animation: changeSmall 1s;
               animation-fill-mode: forwards;
               opacity: 1;
               @keyframes changeSmall {
                 0% {
-                  font-size: 500px;
                   top: -2.6em;
                   left: 6em;
                   opacity: 1;
                 }
                 85% {
-                  font-size: 500px;
                   top: -2.6em;
                   left: 6em;
                 }
                 100% {
-                  font-size: 16px;
                   opacity: 1;
-                  top: -3.125em;
-                  left: 7.5em;
-                }
-              }
-              .videos {
-                position: absolute;
-                top: 2.4em;
-                left: 5.4375em;
-                margin: auto;
-                z-index: 100;
-                width: 2.5em;
-                height: 1.875em;
-                transform: rotate(-10deg);
-                animation: sixHide 7s;
-                animation-fill-mode: forwards;
-                opacity: 0;
-                @keyframes sixHide {
-                  0% {
-                    opacity: 1;
-                  }
-                  85% {
-                    opacity: 1;
-                  }
-                  100% {
-                    opacity: 0;
-                  }
+                  top: -2.6em;
+                  left: 6em;
                 }
               }
             }
