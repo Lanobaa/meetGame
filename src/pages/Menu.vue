@@ -84,7 +84,6 @@ const menus = ref([
 .menu {
   width: 220px;
   padding: 10px;
-  height: 100%;
   border-top: 4px solid #f8f8f8;
   background-image: url('../assets/menubg.png');
   background-repeat: no-repeat;

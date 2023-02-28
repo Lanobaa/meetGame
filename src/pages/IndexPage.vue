@@ -584,11 +584,8 @@ onMounted(() => {
 <style lang="less" scoped>
 .home {
   width: 100vw;
-  height: 100vh;
   .main {
     width: 100vw;
-    height: calc(100vh - 60px);
-    overflow: hidden;
     .body {
       max-height: 100%;
       background: #f8f8f8;
