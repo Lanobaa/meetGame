@@ -119,6 +119,15 @@ const mouseLeaveFn = () => {
         font-size: 15px;
         transform: scale(1.1);
         transform-origin: center right;
+        & > div > img {
+          filter: drop-shadow(10px 0 5px rgba(0,0,0,0.05));
+        }
+      }
+      & > div {
+        img {
+          filter: drop-shadow(10px 0 5px rgba(0,0,0,0.15));
+        }
+        span, p { text-shadow: 2px 2px 1px rgba(0,0,0,0.1) };
       }
     }
 
@@ -127,6 +136,9 @@ const mouseLeaveFn = () => {
         font-size: 15px;
         transform: scale(1.1);
         transform-origin: center right;
+        & > div > img {
+          filter: drop-shadow(10px 0 5px rgba(0,0,0,0.05));
+        }
       }
       padding: 10px 0;
       transition: all 300ms;
